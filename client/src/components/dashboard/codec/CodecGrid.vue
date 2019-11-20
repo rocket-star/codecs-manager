@@ -42,7 +42,7 @@
         <v-btn
           fab
           dark
-          color="error"
+          color="orange"
           class="mb-3"
           @click="deleteCodec(codec)"
         >
@@ -55,6 +55,15 @@
           @click="uploadZip(codec)"
         >
           <v-icon>unarchive</v-icon>
+        </v-btn>
+        <v-btn
+          fab
+          dark
+          color="error"
+          class="mb-3"
+          @click="shutdownCodec(codec)"
+        >
+          <v-icon dark>mdi-power</v-icon>
         </v-btn>
       </v-layout>
     </v-expansion-panel-content>
@@ -85,6 +94,15 @@
         @closeDialog="showDialogUpload = false"
       ></app-codec-upload>
     </v-dialog>
+    <v-dialog
+      v-model="showDialogShutdown"
+      max-width="400"
+    >
+      <app-codec-shutdown
+        :codec="codecSelected"
+        @closeDialog="showDialogShutdown = false"
+      ></app-codec-shutdown>
+    </v-dialog>
   </v-expansion-panel>
 </template>
 
@@ -93,6 +111,7 @@ import CodecDetails from "./CodecDetails.vue";
 import CodecEdit from "./CodecEdit.vue";
 import CodecDelete from "./CodecDelete.vue";
 import CodecUpload from "./CodecUpload.vue";
+import CodecShutdown from "./CodecShutdown.vue";
 
 export default {
   data() {
@@ -100,14 +119,16 @@ export default {
       codecSelected: null,
       showDialogEdit: false,
       showDialogDelete: false,
-      showDialogUpload: false
+      showDialogUpload: false,
+      showDialogShutdown: false
     };
   },
   components: {
     appCodecDetails: CodecDetails,
     appCodecEdit: CodecEdit,
     appCodecDelete: CodecDelete,
-    appCodecUpload: CodecUpload
+    appCodecUpload: CodecUpload,
+    appCodecShutdown: CodecShutdown
   },
   computed: {
     codecs() {
@@ -126,6 +147,10 @@ export default {
     uploadZip(codec) {
       this.codecSelected = codec;
       this.showDialogUpload = true;
+    },
+    shutdownCodec(codec) {
+      this.codecSelected = codec;
+      this.showDialogShutdown = true;
     }
   }
 };

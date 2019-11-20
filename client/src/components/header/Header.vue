@@ -5,7 +5,7 @@
     </v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items>
-      <a class="d-flex link-menu" target="_blank" :href="getURL('15130')">
+      <a class="d-flex link-menu" target="_blank" :href="getURL('15131')">
         <v-btn flat>People Presence</v-btn>
       </a>
       <a class="d-flex link-menu" target="_blank" :href="getURL('15140')">

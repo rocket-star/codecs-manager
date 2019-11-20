@@ -40,9 +40,21 @@ const codecSchema = mongoose.Schema(
       type: Boolean,
       default: true
     },
+    alertBot: {
+      type: Boolean,
+      default: true
+    },
     cloud: {
       type: Boolean,
       default: false
+    },
+    floor: {
+      type: String,
+      required: true
+    },
+    team: {
+      type: String,
+      required: true
     },
     error: {
       type: String,

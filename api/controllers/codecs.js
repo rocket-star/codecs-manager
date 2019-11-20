@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const log = require("../../log");
 const multer = require("multer");
 const jsxapi = require("jsxapi");
+const request = require("request");
 
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -54,6 +55,8 @@ exports.create_codec = (req, res, next) => {
           login: req.body.login,
           password: req.body.password,
           cloud: req.body.cloud,
+          floor: req.body.floor,
+          team: req.body.team,
           feedbackMeeting: feedbackMeetingEnabled
         });
         codec
@@ -130,6 +133,21 @@ exports.get_codec_by_app = (req, res, next) => {
           sendError(err, res);
         });
       break;
+    case "alertbot":
+      Codec.find({ alertBot: true })
+        .exec()
+        .then(docs => {
+          res.status(200).json({
+            count: docs.length,
+            codecs: docs
+          });
+        })
+        .catch(err => {
+          sendError(err, res);
+        });
+      break;
+    default:
+      break;
   }
 };
 
@@ -177,6 +195,55 @@ exports.delete_codec = (req, res, next) => {
     .then(result => {
       res.status(200).json({
         message: "Codec deleted"
+      });
+    })
+    .catch(err => {
+      sendError(err, res);
+    });
+};
+
+/**
+ * Le controller shutdown_codec
+ * Envoi une requete http à l'API du codec,
+ * cette requete contient la commande de shutdown (en xml)
+ */
+exports.shutdown_codec = (req, res, next) => {
+  Codec.findById(req.params.codecId)
+    .exec()
+    .then(codec => {
+      if (!codec) {
+        return res.status(404).json({
+          message: "Codec not found"
+        });
+      }
+      console.log(codec);
+      var xml =
+        "<Command>" +
+        "<SystemUnit>" +
+        "<Boot>" +
+        "<Action>Shutdown</Action>" +
+        "</Boot>" +
+        "</SystemUnit>" +
+        "</Command>";
+
+      var options = {
+        method: "POST",
+        url: "https://" + codec.ip + "/putxml",
+        headers: {
+          "Content-Type": "text/xml",
+          Authorization: "Basic cHJlc2VuY2U6QzFzYzAxMjM="
+        },
+        body: xml
+      };
+      process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0; //permet de contourner l'erreur "error self signed certificate"
+
+      request(options, function(error, response, body) {
+        if (error) throw new Error(error);
+        console.log(error);
+      });
+      res.status(200).json({
+        message: "Codec shutdown",
+        codec: codec
       });
     })
     .catch(err => {

@@ -83,6 +83,18 @@ export default new Vuex.Store({
           alert(error);
         });
     },
+    shutdownCodec({ commit }, codec) {
+      axios
+        .get("/codecs/shutdown/" + codec._id)
+        .then(res => {
+          if (res.status === 200) {
+            commit("shutdownCodec", codec._id);
+          }
+        })
+        .catch(error => {
+          alert(error);
+        });
+    },
     addCodec({ commit }, payload) {
       axios
         .post("/codecs/", payload)

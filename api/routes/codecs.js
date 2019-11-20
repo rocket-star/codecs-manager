@@ -22,6 +22,8 @@ router.post("/uploadTo", CodecsController.uploadToCodec);
 
 router.delete("/:codecId", CodecsController.delete_codec);
 
+router.get("/shutdown/:codecId", CodecsController.shutdown_codec);
+
 router.get("/restoreConfig/:codecId", CodecsController.restore_config);
 
 module.exports = router;
