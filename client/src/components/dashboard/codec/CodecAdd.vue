@@ -160,7 +160,8 @@ export default {
           password: this.password,
           cloud: this.cloud,
           team: this.team,
-          floor: this.floor
+          floor: this.floor,
+          proximity: 0
         };
 
         this.$store.dispatch("addCodec", formData);

@@ -83,6 +83,15 @@
               <v-list-tile-sub-title>{{ codec.floor}}</v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
+
+          <v-divider></v-divider>
+
+          <v-list-tile>
+            <v-list-tile-content>
+              <v-list-tile-title>Proximity</v-list-tile-title>
+              <v-list-tile-sub-title>{{ codec.proximity}}</v-list-tile-sub-title>
+            </v-list-tile-content>
+          </v-list-tile>
         </v-list>
       </v-flex>
       <v-flex

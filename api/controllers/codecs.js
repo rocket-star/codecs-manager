@@ -57,6 +57,7 @@ exports.create_codec = (req, res, next) => {
           cloud: req.body.cloud,
           floor: req.body.floor,
           team: req.body.team,
+          proximity: req.body.proximity,
           feedbackMeeting: feedbackMeetingEnabled
         });
         codec
@@ -177,6 +178,39 @@ exports.update_codec = (req, res, next) => {
     updateOps[ops.propName] = ops.value;
   }
 
+  ///REQUEST HTTP///
+  var value = updateOps.proximity;
+  var xml =
+    "<Configuration>" +
+    "<Audio>" +
+    "<Ultrasound>" +
+    "<MaxVolume>" +
+    value +
+    "</MaxVolume>" +
+    "</Ultrasound>" +
+    "</Audio>" +
+    "</Configuration>";
+
+  var options = {
+    method: "POST",
+    url: "https://" + updateOps.ip + "/putxml",
+    headers: {
+      "Content-Type": "application/xml",
+      Authorization: "Basic cHJlc2VuY2U6QzFzYzAxMjM="
+    },
+    body: xml
+  };
+
+  process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+
+  request(options, function(error, response, body) {
+    if (error) throw new Error(error);
+
+    console.log(body);
+  });
+
+  /////////////////
+
   Codec.update({ _id: id }, { $set: updateOps })
     .exec()
     .then(result => {
@@ -216,7 +250,6 @@ exports.shutdown_codec = (req, res, next) => {
           message: "Codec not found"
         });
       }
-      console.log(codec);
       var xml =
         "<Command>" +
         "<SystemUnit>" +

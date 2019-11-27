@@ -56,6 +56,10 @@ const codecSchema = mongoose.Schema(
       type: String,
       required: true
     },
+    proximity: {
+      type: Number,
+      required: true
+    },
     error: {
       type: String,
       default: null

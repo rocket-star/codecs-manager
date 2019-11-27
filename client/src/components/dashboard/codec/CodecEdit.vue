@@ -63,6 +63,14 @@
           outlined
         ></v-select>
 
+        <v-slider
+          label="Proximity Volume"
+          v-model="codecCopy.proximity"
+          :max="max"
+          :min="min"
+          thumb-label
+        ></v-slider>
+
         <v-radio-group
           v-model="codecCopy.cloud"
           row
@@ -107,6 +115,8 @@ export default {
     return {
       codecCopy: null,
       codecId: null,
+      min: 0,
+      max: 70,
       teams: [
         { name: "Collaboration", id: "collab" },
         { name: "Commercial", id: "sale" },
@@ -131,7 +141,8 @@ export default {
         password: this.codec.password,
         cloud: this.codec.cloud,
         team: this.codec.team,
-        floor: this.codec.floor
+        floor: this.codec.floor,
+        proximity: this.codec.proximity
       };
       this.codecId = this.codec._id;
     }
@@ -184,6 +195,9 @@ export default {
         required
       },
       floor: {
+        required
+      },
+      proximity: {
         required
       }
     }

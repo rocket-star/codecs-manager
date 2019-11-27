@@ -95,6 +95,21 @@ export default new Vuex.Store({
           alert(error);
         });
     },
+    proximityCodec({ commit }, payload) {
+      axios
+        .post("/codecs/proximity/" + payload.codec._id, payload.proximityValue)
+        .then(res => {
+          if (res.status === 200) {
+            commit("proximityCodec", {
+              codec: payload.codec._id,
+              proximityValue: payload.proximityValue
+            });
+          }
+        })
+        .catch(error => {
+          alert(error);
+        });
+    },
     addCodec({ commit }, payload) {
       axios
         .post("/codecs/", payload)
